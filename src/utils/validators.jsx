@@ -11,3 +11,8 @@ export const registerSchema = z.object({
     message: "password incorrect",
     path: ["confirmPassword"],
   });
+
+ export const loginSchema = z.object({
+    email: z.string().email("Email ไม่ถูกต้อง"),
+    password: z.string().min(6, "Password ต้องมากกว่า 6 ")
+  })
