@@ -28,7 +28,7 @@ function Register() {
         
       } catch (error) {
         createAlert("info",error.response.data.message)
-        console.log("aaa",error.response.data.message);
+        console.log(error.response.data.message);
       }
       
   };
