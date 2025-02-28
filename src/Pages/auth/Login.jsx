@@ -10,8 +10,14 @@ import { loginSchema} from "../../utils/validators";
 // import {z} from "@hookform/resolvers"
 import { zodResolver } from "@hookform/resolvers/zod";
 import { actiontLogin } from "../../api/auth";
+import useAuthStore from "../../store/auth-store";
 
 function Login() {
+
+//Zustand
+const actionLoginWithZustand =useAuthStore((state)=>state.actionLoginWithZustand)
+
+
   const navigate =useNavigate()
   const { register, handleSubmit,formState,reset } = useForm({
     resolver:zodResolver(loginSchema)
@@ -21,19 +27,19 @@ console.log(errors);
 
   const hdlSubmit = async (value) => {
     //Delay
-    await new Promise((resolve)=>setTimeout(resolve,2000))
-
-    try {
-      const resp = await actiontLogin(value)
-      const role = resp.data.payload.role
-      roleRedirect(role);
-      // reset()
-
-      createAlert("success", "Login Success");
-    } catch (error) {
-      createAlert("info", error.response?.data?.message);
-      console.log(error.response?.data?.message);
-    }
+    // await new Promise((resolve)=>setTimeout(resolve,2000))
+ 
+      const resp =await actionLoginWithZustand(value)
+      if(resp.success){
+        roleRedirect(resp.role);
+        reset()
+        createAlert("success","Welcome,back")
+      }else{
+        createAlert("info","Something wrong!!!")
+      }
+      // const resp = await actiontLogin(value)
+      // const role = resp.data.payload.role
+  
   };
   const roleRedirect =(role)=>{
     if(role === "ADMIN"){
